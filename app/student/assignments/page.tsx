@@ -1,15 +1,9 @@
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
-import { DashboardLayout } from '@/components/dashboard-layout'
+import DashboardLayout from '@/components/dashboard-layout'
 import Link from 'next/link'
 
-const navigation = [
-  { name: 'Dashboard', href: '/student', icon: '📊' },
-  { name: 'Courses', href: '/student/courses', icon: '📚' },
-  { name: 'Timetable', href: '/student/timetable', icon: '📅' },
-  { name: 'Assignments', href: '/student/assignments', icon: '📝' },
-]
 
 export default async function StudentAssignmentsPage() {
   const user = await getCurrentUser()
@@ -49,7 +43,7 @@ export default async function StudentAssignmentsPage() {
   const overdue = assignments.filter(a => a.dueDate < now && a.submissions.length === 0)
 
   return (
-    <DashboardLayout navigation={navigation}>
+    <DashboardLayout role={user.role}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
