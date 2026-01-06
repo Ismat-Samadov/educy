@@ -1,15 +1,9 @@
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
-import { DashboardLayout } from '@/components/dashboard-layout'
+import DashboardLayout from '@/components/dashboard-layout'
 import { DayOfWeek } from '@prisma/client'
 
-const navigation = [
-  { name: 'Dashboard', href: '/student', icon: '📊' },
-  { name: 'Courses', href: '/student/courses', icon: '📚' },
-  { name: 'Timetable', href: '/student/timetable', icon: '📅' },
-  { name: 'Assignments', href: '/student/assignments', icon: '📝' },
-]
 
 const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as const
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -63,7 +57,7 @@ export default async function StudentTimetablePage() {
   })
 
   return (
-    <DashboardLayout navigation={navigation}>
+    <DashboardLayout role={user.role}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

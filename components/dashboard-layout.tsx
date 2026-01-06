@@ -4,17 +4,48 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
+import { RoleName } from '@prisma/client'
 
 interface DashboardLayoutProps {
   children: ReactNode
-  navigation: Array<{
+  role: RoleName
+}
+
+const navigationByRole: Record<
+  RoleName,
+  Array<{
     name: string
     href: string
     icon: string
   }>
+> = {
+  ADMIN: [
+    { name: 'Dashboard', href: '/admin', icon: '📊' },
+    { name: 'Users', href: '/admin/users', icon: '👥' },
+    { name: 'Rooms', href: '/admin/rooms', icon: '🏢' },
+    { name: 'Audit Logs', href: '/admin/audit-logs', icon: '📋' },
+  ],
+  INSTRUCTOR: [
+    { name: 'Dashboard', href: '/instructor', icon: '📊' },
+    { name: 'Courses', href: '/instructor/courses', icon: '📚' },
+    { name: 'Assignments', href: '/instructor/assignments', icon: '📝' },
+    { name: 'Schedule', href: '/instructor/schedule', icon: '📅' },
+  ],
+  MODERATOR: [
+    { name: 'Dashboard', href: '/moderator', icon: '📊' },
+    { name: 'Enrollments', href: '/moderator/enrollments', icon: '✅' },
+    { name: 'Courses', href: '/moderator/courses', icon: '📚' },
+  ],
+  STUDENT: [
+    { name: 'Dashboard', href: '/student', icon: '📊' },
+    { name: 'Courses', href: '/student/courses', icon: '📚' },
+    { name: 'Timetable', href: '/student/timetable', icon: '📅' },
+    { name: 'Assignments', href: '/student/assignments', icon: '📝' },
+  ],
 }
 
-export function DashboardLayout({ children, navigation }: DashboardLayoutProps) {
+function DashboardLayout({ children, role }: DashboardLayoutProps) {
+  const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
 
@@ -93,3 +124,6 @@ export function DashboardLayout({ children, navigation }: DashboardLayoutProps) 
     </div>
   )
 }
+
+export default DashboardLayout
+export { DashboardLayout }

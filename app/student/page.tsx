@@ -1,15 +1,9 @@
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
-import { DashboardLayout } from '@/components/dashboard-layout'
+import DashboardLayout from '@/components/dashboard-layout'
 import Link from 'next/link'
 
-const navigation = [
-  { name: 'Dashboard', href: '/student', icon: '📊' },
-  { name: 'Courses', href: '/student/courses', icon: '📚' },
-  { name: 'Timetable', href: '/student/timetable', icon: '📅' },
-  { name: 'Assignments', href: '/student/assignments', icon: '📝' },
-]
 
 export default async function StudentDashboard() {
   const user = await getCurrentUser()
@@ -68,7 +62,7 @@ export default async function StudentDashboard() {
   })
 
   return (
-    <DashboardLayout navigation={navigation}>
+    <DashboardLayout role={user.role}>
       <div className="space-y-6">
         {/* Welcome Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg p-8 text-white">
