@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from './auth'
 
 // Define permissions for each role
-export const ROLE_PERMISSIONS = {
+export const ROLE_PERMISSIONS: Record<RoleName, string[]> = {
   [RoleName.ADMIN]: [
     'manage_users',
     'manage_roles',
@@ -36,11 +36,11 @@ export const ROLE_PERMISSIONS = {
     'submit_assignments',
     'view_grades',
   ],
-} as const
+}
 
 // Helper function to check if a role has a specific permission
 export function hasPermission(role: RoleName, permission: string): boolean {
-  return ROLE_PERMISSIONS[role]?.includes(permission as any) ?? false
+  return ROLE_PERMISSIONS[role]?.includes(permission) ?? false
 }
 
 // Helper function to check if a role has any of the specified permissions
