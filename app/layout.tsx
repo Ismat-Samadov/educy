@@ -6,8 +6,45 @@ import { SessionProvider } from '@/components/providers/session-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Educy - Course Management System',
-  description: 'Modern course management application for students, instructors, and administrators',
+  title: {
+    default: 'Educy - Course Management System',
+    template: '%s | Educy',
+  },
+  description: 'Modern course management application for students, instructors, and administrators. Manage courses, assignments, schedules, and more.',
+  keywords: ['education', 'course management', 'LMS', 'learning', 'assignments', 'timetable'],
+  authors: [{ name: 'Educy' }],
+  creator: 'Educy',
+  publisher: 'Educy',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-icon.svg', type: 'image/svg+xml' },
+    ],
+  },
+  manifest: '/manifest.json',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
+    { media: '(prefers-color-scheme: dark)', color: '#1e40af' },
+  ],
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    title: 'Educy - Course Management System',
+    description: 'Modern course management application for students, instructors, and administrators.',
+    siteName: 'Educy',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Educy - Course Management System',
+    description: 'Modern course management application for students, instructors, and administrators.',
+  },
 }
 
 export default function RootLayout({
