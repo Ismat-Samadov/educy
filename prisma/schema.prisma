@@ -1,0 +1,233 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleName {
+  ADMIN
+  MODERATOR
+  INSTRUCTOR
+  STUDENT
+}
+
+enum EnrollmentStatus {
+  PENDING
+  ENROLLED
+  WITHDRAWN
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum NotificationType {
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_DUE_SOON
+  GRADE_RECEIVED
+  LESSON_CANCELLED
+  ENROLLMENT_APPROVED
+  ENROLLMENT_REJECTED
+  GENERAL
+}
+
+model User {
+  id                String         @id @default(uuid())
+  email             String         @unique
+  hashedPassword    String
+  name              String
+  role              RoleName       @default(STUDENT)
+  profileAvatarUrl  String?
+  createdAt         DateTime       @default(now())
+  lastLogin         DateTime?
+
+  // Relations
+  instructorSections Section[]      @relation("InstructorSections")
+  createdCourses     Course[]       @relation("CourseCreator")
+  enrollments        Enrollment[]
+  submissions        Submission[]
+  files              File[]
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+  createdAssignments Assignment[]
+
+  @@map("users")
+}
+
+model Course {
+  id          String    @id @default(uuid())
+  code        String    @unique
+  title       String
+  description String?
+  term        String
+  visibility  Boolean   @default(true)
+  createdById String
+  createdBy   User      @relation("CourseCreator", fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  sections    Section[]
+
+  @@map("courses")
+}
+
+model Section {
+  id           String       @id @default(uuid())
+  courseId     String
+  course       Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  instructorId String
+  instructor   User         @relation("InstructorSections", fields: [instructorId], references: [id])
+  capacity     Int          @default(30)
+  term         String
+  createdAt    DateTime     @default(now())
+
+  // Relations
+  lessons      Lesson[]
+  enrollments  Enrollment[]
+  assignments  Assignment[]
+
+  @@map("sections")
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  location  String?
+  capacity  Int
+  resources Json?    // Store projector, lab equipment, etc.
+  createdAt DateTime @default(now())
+
+  // Relations
+  lessons   Lesson[]
+
+  @@map("rooms")
+}
+
+model Lesson {
+  id          String     @id @default(uuid())
+  sectionId   String
+  section     Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  dayOfWeek   DayOfWeek
+  startTime   String     // Format: "HH:MM"
+  endTime     String     // Format: "HH:MM"
+  roomId      String?
+  room        Room?      @relation(fields: [roomId], references: [id])
+  materialIds String[]   // Array of file IDs
+  createdAt   DateTime   @default(now())
+
+  // Relations
+  schedules   Schedule[]
+
+  @@map("lessons")
+}
+
+model Schedule {
+  id          String   @id @default(uuid())
+  lessonId    String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  date        DateTime // Specific date for this lesson occurrence
+  isCancelled Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  @@map("schedules")
+}
+
+model Enrollment {
+  id         String           @id @default(uuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sectionId  String
+  section    Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  status     EnrollmentStatus @default(PENDING)
+  enrolledAt DateTime         @default(now())
+
+  @@unique([userId, sectionId])
+  @@map("enrollments")
+}
+
+model Assignment {
+  id               String       @id @default(uuid())
+  sectionId        String
+  section          Section      @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title            String
+  description      String?
+  dueDate          DateTime
+  allowedFileTypes String[]     // ["pdf", "docx", "txt"]
+  maxSizeBytes     Int          @default(10485760) // 10MB default
+  createdById      String
+  createdBy        User         @relation(fields: [createdById], references: [id])
+  createdAt        DateTime     @default(now())
+
+  // Relations
+  submissions      Submission[]
+
+  @@map("assignments")
+}
+
+model Submission {
+  id           String    @id @default(uuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fileKey      String?   // R2 storage key
+  text         String?
+  submittedAt  DateTime  @default(now())
+  grade        Float?
+  feedback     String?
+  gradedAt     DateTime?
+
+  @@unique([assignmentId, studentId])
+  @@map("submissions")
+}
+
+model File {
+  id         String   @id @default(uuid())
+  ownerId    String
+  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  key        String   @unique // R2 storage key
+  filename   String
+  mimeType   String
+  sizeBytes  Int
+  uploadedAt DateTime @default(now())
+
+  @@map("files")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  payload   Json             // Flexible payload for different notification types
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String   // "USER_ROLE_CHANGED", "ASSIGNMENT_GRADED", etc.
+  targetType String?  // "User", "Assignment", "Course", etc.
+  targetId   String?
+  details    Json?    // Additional context
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}
