@@ -91,7 +91,7 @@ async function main() {
       code: 'CS101',
       title: 'Introduction to Web Development',
       description: 'Learn the fundamentals of web development including HTML, CSS, JavaScript, and modern frameworks.',
-      term: 'Fall 2024',
+      term: 'Spring 2026',
       visibility: true,
       createdById: instructor.id,
     },
@@ -105,7 +105,7 @@ async function main() {
       courseId: course.id,
       instructorId: instructor.id,
       capacity: 30,
-      term: 'Fall 2024',
+      term: 'Spring 2026',
     },
   })
 
@@ -154,7 +154,7 @@ async function main() {
   console.log('✓ Created lessons')
 
   // Create schedules for the next 4 weeks
-  const startDate = new Date('2024-09-02') // First Monday of Fall 2024
+  const startDate = new Date('2026-01-26') // First Monday of Spring 2026
   const lessons = [lesson1, lesson2, lesson3]
 
   for (let week = 0; week < 4; week++) {
@@ -201,7 +201,7 @@ async function main() {
       sectionId: section.id,
       title: 'Project 1: Personal Portfolio Website',
       description: 'Create a responsive personal portfolio website using HTML, CSS, and JavaScript',
-      dueDate: new Date('2024-09-30'),
+      dueDate: new Date('2026-02-28'),
       allowedFileTypes: ['zip', 'html', 'pdf'],
       maxSizeBytes: 10485760, // 10MB
       createdById: instructor.id,
