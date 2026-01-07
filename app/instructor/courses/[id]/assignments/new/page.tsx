@@ -1,0 +1,267 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import DashboardLayout from '@/components/dashboard-layout'
+
+const FILE_TYPES = [
+  { value: 'pdf', label: 'PDF (.pdf)' },
+  { value: 'doc', label: 'Word (.doc)' },
+  { value: 'docx', label: 'Word (.docx)' },
+  { value: 'txt', label: 'Text (.txt)' },
+  { value: 'zip', label: 'ZIP Archive (.zip)' },
+  { value: 'jpg', label: 'JPEG Image (.jpg)' },
+  { value: 'png', label: 'PNG Image (.png)' },
+  { value: 'xlsx', label: 'Excel (.xlsx)' },
+  { value: 'pptx', label: 'PowerPoint (.pptx)' },
+]
+
+export default function NewAssignmentPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
+  const { data: session } = useSession()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    dueDate: '',
+    dueTime: '23:59',
+    allowedFileTypes: [] as string[],
+    maxSizeBytes: 10485760, // 10MB default
+  })
+
+  const handleFileTypeToggle = (type: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      allowedFileTypes: prev.allowedFileTypes.includes(type)
+        ? prev.allowedFileTypes.filter((t) => t !== type)
+        : [...prev.allowedFileTypes, type],
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+
+    try {
+      // Combine date and time
+      const dueDateTimeString = `${formData.dueDate}T${formData.dueTime}:00.000Z`
+
+      const response = await fetch(`/api/sections/${params.id}/assignments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          dueDate: dueDateTimeString,
+          allowedFileTypes: formData.allowedFileTypes,
+          maxSizeBytes: formData.maxSizeBytes,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create assignment')
+      }
+
+      // Redirect back to course page
+      router.push(`/instructor/courses/${params.id}`)
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!session?.user) {
+    return null
+  }
+
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0]
+
+  return (
+    <DashboardLayout role={session.user.role}>
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Create New Assignment
+          </h1>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
+            Set up a new assignment for students
+          </p>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            {/* Assignment Title */}
+            <div>
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Assignment Title *
+              </label>
+              <input
+                type="text"
+                id="title"
+                required
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                placeholder="e.g., Project 1: Portfolio Website"
+                maxLength={200}
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                rows={5}
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                placeholder="Provide detailed instructions for the assignment..."
+              />
+            </div>
+
+            {/* Due Date & Time */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="dueDate"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  Due Date *
+                </label>
+                <input
+                  type="date"
+                  id="dueDate"
+                  required
+                  min={today}
+                  value={formData.dueDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dueDate: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="dueTime"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  Due Time *
+                </label>
+                <input
+                  type="time"
+                  id="dueTime"
+                  required
+                  value={formData.dueTime}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dueTime: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+            </div>
+
+            {/* Allowed File Types */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Allowed File Types (Optional)
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {FILE_TYPES.map((type) => (
+                  <label
+                    key={type.value}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.allowedFileTypes.includes(type.value)}
+                      onChange={() => handleFileTypeToggle(type.value)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      {type.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Leave unchecked to allow all file types
+              </p>
+            </div>
+
+            {/* Max File Size */}
+            <div>
+              <label
+                htmlFor="maxSize"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Maximum File Size *
+              </label>
+              <select
+                id="maxSize"
+                required
+                value={formData.maxSizeBytes}
+                onChange={(e) =>
+                  setFormData({ ...formData, maxSizeBytes: parseInt(e.target.value) })
+                }
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              >
+                <option value={5242880}>5 MB</option>
+                <option value={10485760}>10 MB</option>
+                <option value={20971520}>20 MB</option>
+                <option value={52428800}>50 MB</option>
+                <option value={104857600}>100 MB</option>
+              </select>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+              >
+                {loading ? 'Creating...' : 'Create Assignment'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </DashboardLayout>
+  )
+}
