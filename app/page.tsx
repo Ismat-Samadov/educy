@@ -214,6 +214,282 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Complete Features Section */}
+      <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Complete Platform Features
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Everything you need for professional course management
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Course Management */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">📚</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Course Management
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Multi-section course organization</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Instructor assignment per section</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Term and visibility management</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Capacity tracking and enforcement</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* AI-Powered Learning */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">✨</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    AI-Powered Learning (Gemini 2.5)
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Intelligent student homework assistance</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Automated grading suggestions</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Concept explanations & study help</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Feedback generation for instructors</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Assignment System */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">📝</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Assignment Workflow
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>File type & size restrictions</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Cloud file uploads (Cloudflare R2)</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Text & file submissions</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Grading with feedback system</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Auto-notifications on submission & grading</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Smart Scheduling */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">📅</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Smart Scheduling
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Automated timetable generation</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Room allocation & conflict detection</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Recurring lesson scheduling</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Class cancellation management</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Enrollment Management */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">👥</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Enrollment Management
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Student enrollment requests</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Instructor/moderator approval workflow</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Capacity management & waitlists</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Enrollment status tracking</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Security & Access Control */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">🔐</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Security & RBAC
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Role-based access control (4 roles)</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>NextAuth authentication</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Middleware route protection</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Comprehensive audit logging</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* File & Cloud Storage */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">☁️</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    File & Cloud Storage
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Cloudflare R2 integration</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Signed URL uploads (secure)</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>File metadata tracking</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Assignment file downloads</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Notifications & Analytics */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">📊</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Notifications & Analytics
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Real-time notification system</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Assignment, grading, enrollment alerts</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Progress tracking dashboards</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span>Submission & grading statistics</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Tech Stack */}
       <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-indigo-600">
         <div className="max-w-7xl mx-auto">

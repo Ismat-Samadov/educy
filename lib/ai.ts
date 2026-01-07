@@ -1,12 +1,18 @@
 import { GoogleGenAI } from '@google/genai'
 
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error('GEMINI_API_KEY is not set in environment variables')
-}
+let ai: GoogleGenAI | null = null
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-})
+function getAI() {
+  if (!ai) {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error('GEMINI_API_KEY is not set in environment variables')
+    }
+    ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    })
+  }
+  return ai
+}
 
 export interface StudentHelpRequest {
   assignmentTitle: string
@@ -49,7 +55,7 @@ IMPORTANT RULES:
 
 Provide your response:`
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: prompt,
   })
@@ -93,7 +99,7 @@ Format your response as JSON with this structure:
 
 Provide your analysis:`
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: prompt,
   })
@@ -145,7 +151,7 @@ Please provide:
 
 Make it engaging and easy to understand:`
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: prompt,
   })
@@ -171,7 +177,7 @@ The questions should:
 
 Format: Return only a JSON array of question strings, like: ["Question 1?", "Question 2?", ...]`
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: prompt,
   })
@@ -219,7 +225,7 @@ Generate helpful, constructive feedback that:
 
 Write the feedback:`
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: prompt,
   })
