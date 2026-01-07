@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
+import { sendEnrollmentApprovedEmail } from '@/lib/email'
 
 // POST /api/enrollments/[id]/approve - Approve enrollment request
 export async function POST(
@@ -113,6 +114,17 @@ export async function POST(
           sectionId: enrollment.section.id,
         },
       },
+    })
+
+    // Send email notification to student
+    sendEnrollmentApprovedEmail({
+      to: enrollment.user.email,
+      studentName: enrollment.user.name,
+      courseCode: enrollment.section.course.code,
+      courseTitle: enrollment.section.course.title,
+      courseId: enrollment.section.course.id,
+    }).catch((error) => {
+      console.error(`Failed to send enrollment approval email to ${enrollment.user.email}:`, error)
     })
 
     return NextResponse.json({

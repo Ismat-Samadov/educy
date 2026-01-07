@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { sendAssignmentCreatedEmail } from '@/lib/email'
 
 const createAssignmentSchema = z.object({
   title: z.string().min(1).max(200),
@@ -117,6 +118,32 @@ export async function POST(
             dueDate: data.dueDate,
           },
         })),
+      })
+
+      // Send email notifications to all enrolled students
+      const studentsWithEmails = await prisma.user.findMany({
+        where: {
+          id: { in: enrolledStudents.map((e) => e.userId) },
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      })
+
+      // Send emails in background (don't await to avoid blocking)
+      studentsWithEmails.forEach((student) => {
+        sendAssignmentCreatedEmail({
+          to: student.email,
+          studentName: student.name,
+          assignmentTitle: assignment.title,
+          courseCode: section.course.code,
+          dueDate: dueDate,
+          assignmentId: assignment.id,
+        }).catch((error) => {
+          console.error(`Failed to send email to ${student.email}:`, error)
+        })
       })
     }
 
