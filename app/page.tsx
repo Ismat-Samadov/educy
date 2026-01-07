@@ -63,17 +63,17 @@ export default function LandingPage() {
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
               <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Modern Education
+                Complete Course
               </span>
               <br />
               <span className="text-gray-900 dark:text-white">
-                Management Platform
+                Management System
               </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Streamline course management, enhance learning experiences, and empower educators with our comprehensive platform.
+              Full-stack, AI-powered platform ready to deploy for your course. White-label customizable with your branding.
             </p>
 
             {/* CTA Buttons */}
@@ -82,7 +82,7 @@ export default function LandingPage() {
                 href="/auth/register"
                 className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition shadow-2xl shadow-blue-500/40 font-semibold text-lg flex items-center space-x-2"
               >
-                <span>Start Free Trial</span>
+                <span>Get Started</span>
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -91,29 +91,29 @@ export default function LandingPage() {
                 href="/auth/signin"
                 className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-2xl hover:shadow-xl transition border-2 border-gray-200 dark:border-gray-700 font-semibold text-lg"
               >
-                Watch Demo
+                View Demo
               </Link>
             </div>
 
-            {/* Trust Indicators */}
+            {/* Value Propositions */}
             <div className="pt-12 flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600 dark:text-gray-400">
               <div className="flex items-center space-x-2">
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>Free 14-day trial</span>
+                <span>Complete Full-Stack Solution</span>
               </div>
               <div className="flex items-center space-x-2">
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>No credit card required</span>
+                <span>AI-Powered Features</span>
               </div>
               <div className="flex items-center space-x-2">
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>Cancel anytime</span>
+                <span>White-Label Ready</span>
               </div>
             </div>
           </div>
@@ -125,50 +125,50 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Everything you need to succeed
+              Enterprise-Grade Features
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Powerful features for students, instructors, and administrators
+              Complete toolkit for modern course management
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="group bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition border border-gray-100 dark:border-gray-700 hover:-translate-y-2 duration-300">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                <span className="text-3xl">📊</span>
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                <span className="text-3xl">✨</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                Smart Dashboard
+                AI-Powered Learning
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Get real-time insights into courses, assignments, and student progress.
+                Gemini AI integration for intelligent student assistance and automated grading support.
               </p>
             </div>
 
             {/* Feature 2 */}
             <div className="group bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition border border-gray-100 dark:border-gray-700 hover:-translate-y-2 duration-300">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                <span className="text-3xl">📅</span>
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                <span className="text-3xl">📊</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                Smart Scheduling
+                Real-Time Analytics
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Automated timetables with room allocation and conflict detection.
+                Track progress, submissions, and performance with comprehensive dashboards and insights.
               </p>
             </div>
 
             {/* Feature 3 */}
             <div className="group bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition border border-gray-100 dark:border-gray-700 hover:-translate-y-2 duration-300">
               <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                <span className="text-3xl">📝</span>
+                <span className="text-3xl">📅</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                Assignment Hub
+                Smart Scheduling
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Seamless submission, grading, and feedback workflow for all assignments.
+                Automated timetables with intelligent room allocation and conflict detection.
               </p>
             </div>
 
@@ -178,62 +178,98 @@ export default function LandingPage() {
                 <span className="text-3xl">☁️</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                Cloud Storage
+                Cloud Infrastructure
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Secure file storage with Cloudflare R2 integration for all materials.
+                Cloudflare R2 storage, PostgreSQL database, secure file uploads with signed URLs.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="group bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition border border-gray-100 dark:border-gray-700 hover:-translate-y-2 duration-300">
+              <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                <span className="text-3xl">📝</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Complete Assignment Workflow
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                From creation to submission, grading, and feedback - all automated and seamless.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="group bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition border border-gray-100 dark:border-gray-700 hover:-translate-y-2 duration-300">
+              <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                <span className="text-3xl">🔐</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Security & RBAC
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Role-based access control, audit logging, and enterprise-grade authentication.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Role-based Features */}
+      {/* Tech Stack */}
       <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-indigo-600">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Built for everyone
+              Modern Tech Stack
             </h2>
             <p className="text-xl text-blue-100">
-              Tailored experiences for each role
+              Built with cutting-edge technologies for performance and scalability
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {[
-              { icon: '👨‍💼', role: 'Administrators', desc: 'Full system control & analytics' },
-              { icon: '👨‍🏫', role: 'Instructors', desc: 'Course & grade management' },
-              { icon: '🎓', role: 'Students', desc: 'Learning & assignment tracking' },
-              { icon: '🛡️', role: 'Moderators', desc: 'Content & enrollment management' }
+              { icon: '⚡', name: 'Next.js 14' },
+              { icon: '🔷', name: 'TypeScript' },
+              { icon: '🗄️', name: 'PostgreSQL' },
+              { icon: '☁️', name: 'Cloudflare R2' },
+              { icon: '🤖', name: 'Gemini AI' },
+              { icon: '🔐', name: 'NextAuth' }
             ].map((item, i) => (
-              <div key={i} className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition">
-                <div className="text-5xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-white mb-2">{item.role}</h3>
-                <p className="text-blue-100">{item.desc}</p>
+              <div key={i} className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition text-center">
+                <div className="text-4xl mb-3">{item.icon}</div>
+                <p className="text-white font-semibold">{item.name}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Value Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Deploy-Ready Solution
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Everything you need to launch your course platform
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { number: '10K+', label: 'Active Students' },
-              { number: '500+', label: 'Courses' },
-              { number: '99.9%', label: 'Uptime' },
-              { number: '24/7', label: 'Support' }
-            ].map((stat, i) => (
+              { icon: '⚡', title: 'Instant Deploy', desc: 'Production-ready codebase' },
+              { icon: '🎨', title: 'Customizable', desc: 'Your branding, your colors' },
+              { icon: '🔒', title: 'Secure', desc: 'Enterprise-grade security' },
+              { icon: '📈', title: 'Scalable', desc: 'Cloud-native architecture' }
+            ].map((item, i) => (
               <div key={i} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 dark:text-gray-400 font-medium">
-                  {stat.label}
-                </div>
+                <div className="text-5xl mb-4">{item.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -245,16 +281,16 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-12 text-center shadow-2xl">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Ready to transform your education?
+              Launch Your Course Platform Today
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Join thousands of institutions already using Educy
+              Complete, customizable, and ready to deploy
             </p>
             <Link
               href="/auth/register"
               className="inline-flex items-center space-x-2 px-8 py-4 bg-white text-blue-600 rounded-2xl hover:shadow-xl transition font-semibold text-lg"
             >
-              <span>Get Started for Free</span>
+              <span>Get Started</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
