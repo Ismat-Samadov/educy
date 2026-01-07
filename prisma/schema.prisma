@@ -1,11 +1,13 @@
 // This is your Prisma schema file
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["educy"]
 }
 
 enum RoleName {
@@ -13,12 +15,16 @@ enum RoleName {
   MODERATOR
   INSTRUCTOR
   STUDENT
+
+  @@schema("educy")
 }
 
 enum EnrollmentStatus {
   PENDING
   ENROLLED
   WITHDRAWN
+
+  @@schema("educy")
 }
 
 enum DayOfWeek {
@@ -29,6 +35,8 @@ enum DayOfWeek {
   FRIDAY
   SATURDAY
   SUNDAY
+
+  @@schema("educy")
 }
 
 enum NotificationType {
@@ -39,6 +47,8 @@ enum NotificationType {
   ENROLLMENT_APPROVED
   ENROLLMENT_REJECTED
   GENERAL
+
+  @@schema("educy")
 }
 
 model User {
@@ -62,6 +72,7 @@ model User {
   createdAssignments Assignment[]
 
   @@map("users")
+  @@schema("educy")
 }
 
 model Course {
@@ -79,6 +90,7 @@ model Course {
   sections    Section[]
 
   @@map("courses")
+  @@schema("educy")
 }
 
 model Section {
@@ -97,6 +109,7 @@ model Section {
   assignments  Assignment[]
 
   @@map("sections")
+  @@schema("educy")
 }
 
 model Room {
@@ -111,6 +124,7 @@ model Room {
   lessons   Lesson[]
 
   @@map("rooms")
+  @@schema("educy")
 }
 
 model Lesson {
@@ -131,6 +145,7 @@ model Lesson {
   schedules   Schedule[]
 
   @@map("lessons")
+  @@schema("educy")
 }
 
 model Schedule {
@@ -143,6 +158,7 @@ model Schedule {
   createdAt   DateTime @default(now())
 
   @@map("schedules")
+  @@schema("educy")
 }
 
 model Enrollment {
@@ -156,6 +172,7 @@ model Enrollment {
 
   @@unique([userId, sectionId])
   @@map("enrollments")
+  @@schema("educy")
 }
 
 model Assignment {
@@ -175,6 +192,7 @@ model Assignment {
   submissions      Submission[]
 
   @@map("assignments")
+  @@schema("educy")
 }
 
 model Submission {
@@ -192,6 +210,7 @@ model Submission {
 
   @@unique([assignmentId, studentId])
   @@map("submissions")
+  @@schema("educy")
 }
 
 model File {
@@ -205,6 +224,7 @@ model File {
   uploadedAt DateTime @default(now())
 
   @@map("files")
+  @@schema("educy")
 }
 
 model Notification {
@@ -217,6 +237,7 @@ model Notification {
   createdAt DateTime         @default(now())
 
   @@map("notifications")
+  @@schema("educy")
 }
 
 model AuditLog {
@@ -230,4 +251,5 @@ model AuditLog {
   createdAt  DateTime @default(now())
 
   @@map("audit_logs")
+  @@schema("educy")
 }
