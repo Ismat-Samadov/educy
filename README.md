@@ -198,6 +198,40 @@ Open `http://localhost:3000`
 - **Instructor:** alice.instructor@educy.com / instructor123
 - **Student:** bob.student@educy.com / student123
 
+### ⚠️ Common Issues & Fixes (Local Development)
+
+The following issues may occur during local development, along with their solutions:
+
+1. **`openssl` command not found (Windows)**
+   - **Problem:** Running `openssl rand -base64 32` fails.
+   - **Solution:**
+     - Install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) and add it to your PATH.
+     - Alternatively, generate a secret using Node.js:
+       ```bash
+       node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+       ```
+
+2. **Seed script only available in TypeScript (`seed.ts`)**
+   - **Problem:** Node.js cannot directly run `.ts` files.
+   - **Solution:**
+     - Use `ts-node` if installed:
+       ```bash
+       ts-node prisma/seed.ts
+       ```
+     - Or run the committed `.js` version of the seed file:
+       ```bash
+       node prisma/seed.js
+       ```
+
+3. **Seed data not populating**
+   - **Problem:** Demo data does not appear in the database.
+   - **Solution:**
+     ```bash
+     npx prisma db push    
+     npm run db:seed       
+     ```
+
+
 ---
 
 ## 📁 Project Structure
