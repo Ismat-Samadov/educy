@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { sendGradeReceivedEmail } from '@/lib/email'
 
 const gradeSubmissionSchema = z.object({
   grade: z.number().min(0).max(100),
@@ -106,6 +107,19 @@ export async function PUT(
           grade: data.grade,
         },
       },
+    })
+
+    // Send email notification to student
+    sendGradeReceivedEmail({
+      to: submission.student.email,
+      studentName: submission.student.name,
+      assignmentTitle: submission.assignment.title,
+      courseCode: submission.assignment.section.course.code,
+      grade: data.grade,
+      feedback: data.feedback,
+      submissionId: params.id,
+    }).catch((error) => {
+      console.error(`Failed to send grade email to ${submission.student.email}:`, error)
     })
 
     return NextResponse.json({
