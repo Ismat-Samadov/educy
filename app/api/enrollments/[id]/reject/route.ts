@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { sendEnrollmentRejectedEmail } from '@/lib/email'
 
 const rejectSchema = z.object({
   reason: z.string().optional(),
@@ -106,6 +107,17 @@ export async function POST(
           reason: data.reason || 'No reason provided',
         },
       },
+    })
+
+    // Send email notification to student
+    sendEnrollmentRejectedEmail({
+      to: enrollment.user.email,
+      studentName: enrollment.user.name,
+      courseCode: enrollment.section.course.code,
+      courseTitle: enrollment.section.course.title,
+      reason: data.reason,
+    }).catch((error) => {
+      console.error(`Failed to send enrollment rejection email to ${enrollment.user.email}:`, error)
     })
 
     return NextResponse.json({
