@@ -1,5 +1,6 @@
-import { PrismaClient, RoleName, DayOfWeek, EnrollmentStatus } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+require('dotenv').config()
+const { PrismaClient, RoleName, DayOfWeek, EnrollmentStatus } = require('@prisma/client')
+const bcrypt = require('bcryptjs')
 
 const prisma = new PrismaClient()
 
