@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import AIStudentHelp from '@/components/ai-student-help'
 
 interface Assignment {
   id: string
@@ -153,6 +154,11 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             {assignment.section.course.code}: {assignment.section.course.title}
           </p>
+        </div>
+
+        {/* AI Help Section */}
+        <div className="mb-6">
+          <AIStudentHelp assignmentId={params.id} />
         </div>
 
         {/* Assignment Details */}
