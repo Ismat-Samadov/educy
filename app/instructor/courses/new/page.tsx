@@ -154,7 +154,7 @@ export default function NewCoursePage() {
                 value={formData.term}
                 onChange={(e) => setFormData({ ...formData, term: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="e.g., Fall 2024, Spring 2025"
+                placeholder="e.g., Spring 2026, Fall 2026"
                 maxLength={50}
               />
             </div>
