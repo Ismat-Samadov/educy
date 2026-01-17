@@ -1,16 +1,15 @@
 'use client'
-
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { ReactNode, useState, useEffect, useTransition } from 'react'
+import { usePathname } from 'next/navigation'
+import { ReactNode, useState } from 'react'
 import { RoleName } from '@prisma/client'
+import Image from 'next/image'
 
 interface DashboardLayoutProps {
   children: ReactNode
   role: RoleName
 }
-
 // Icon components
 const icons = {
   dashboard: (
@@ -83,14 +82,7 @@ const icons = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
     </svg>
   ),
-  settings: (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  ),
 }
-
 const navigationByRole: Record<
   RoleName,
   Array<{
@@ -104,7 +96,6 @@ const navigationByRole: Record<
     { name: 'Users', href: '/admin/users', icon: icons.users },
     { name: 'Rooms', href: '/admin/rooms', icon: icons.rooms },
     { name: 'Audit Logs', href: '/admin/audit-logs', icon: icons.auditLogs },
-    { name: 'Settings', href: '/admin/settings', icon: icons.settings },
     { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
   INSTRUCTOR: [
@@ -137,50 +128,32 @@ const navigationByRole: Record<
   ],
 }
 
+
+
 function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
-  const router = useRouter()
-  const [sidebarOpen, setSidebarOpen] = useState(false) // Mobile sidebar state
-  const [collapsed, setCollapsed] = useState(false) // Desktop sidebar collapse state
-  const [isNavigating, setIsNavigating] = useState(false) // Track navigation state
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  // Load collapsed state from localStorage on mount
-  useEffect(() => {
-    const savedState = localStorage.getItem('sidebar-collapsed')
-    if (savedState !== null) {
-      setCollapsed(savedState === 'true')
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('sidebarCollapsed')
+      return saved === 'true'
     }
-  }, [])
+    return false
+  })
 
-  // Prefetch all navigation routes on mount to prevent full page reloads
-  useEffect(() => {
-    navigation.forEach((item) => {
-      router.prefetch(item.href)
-    })
-  }, [navigation, router])
-
-  // Save collapsed state to localStorage whenever it changes
-  const toggleCollapsed = () => {
-    const newState = !collapsed
-    setCollapsed(newState)
-    localStorage.setItem('sidebar-collapsed', String(newState))
+  const handleToggleCollapse = () => {
+    const newState = !isCollapsed
+    setIsCollapsed(newState)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sidebarCollapsed', String(newState))
+    }
   }
-
-  // Detect route changes for loading indicator
-  useEffect(() => {
-    setIsNavigating(false) // Reset loading state when route changes
-  }, [pathname])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
-      {/* Top loading bar */}
-      {isNavigating && (
-        <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-gradient-to-r from-[#5C2482] to-[#F95B0E] animate-pulse" />
-      )}
-
-      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -188,45 +161,32 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
         />
       )}
 
-      {/* Sidebar - Fixed and Persistent */}
+      {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-all duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        } ${collapsed ? 'lg:w-20' : 'lg:w-64'} w-64`}
+        className={`fixed top-0 left-0 z-50 h-full bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-all duration-300 ease-in-out lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } ${isCollapsed ? 'w-20' : 'w-64'}`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo and Toggle */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-purple-400/30">
-            {!collapsed ? (
-              <Link
-                href="/dashboard"
-                className="text-2xl font-bold text-white"
-              >
-                Educy
-              </Link>
-            ) : (
-              <Link
-                href="/dashboard"
-                className="text-2xl font-bold text-white mx-auto"
-              >
-                E
+          {/* Logo */}
+          <div className="flex items-center justify-between h-16 px-6 border-b border-purple-400/30">
+            <Link
+              href="/dashboard"
+              className={`text-2xl font-bold text-white transition-opacity ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100'}`}
+            >
+              Educy
+            </Link>
+            {isCollapsed && (
+              <Link href="/dashboard" className="text-2xl font-bold text-white mx-auto">
+                <Image
+                  src="/logo.jpeg"
+                  alt="E"
+                  width={80}   
+                  height={80}  
+                  className="object-contain"
+                />
               </Link>
             )}
-            {/* Desktop toggle button */}
-            <button
-              onClick={toggleCollapsed}
-              className="hidden lg:block text-white hover:bg-white/10 rounded-lg p-2 transition-colors"
-              title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {collapsed ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                )}
-              </svg>
-            </button>
-            {/* Mobile close button */}
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden text-white hover:bg-white/10 rounded-lg p-2"
@@ -238,13 +198,12 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           </div>
 
           {/* User Info */}
-          <div className={`px-4 py-4 border-b border-purple-400/30 ${collapsed ? 'lg:px-2' : ''}`}>
-            {/* Mobile & Expanded Desktop: Show full user info */}
-            <div className={collapsed ? 'lg:hidden' : ''}>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
-                  {session?.user?.name?.charAt(0).toUpperCase()}
-                </div>
+          <div className={`px-4 py-4 border-b border-purple-400/30 ${isCollapsed ? 'px-2' : ''}`}>
+            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold flex-shrink-0">
+                {session?.user?.name?.charAt(0).toUpperCase()}
+              </div>
+              {!isCollapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">
                     {session?.user?.name}
@@ -253,25 +212,19 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                     {session?.user?.email}
                   </p>
                 </div>
-              </div>
+              )}
+            </div>
+            {!isCollapsed && (
               <div className="mt-3">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#F95B0E] text-white">
                   {session?.user?.role}
                 </span>
               </div>
-            </div>
-            {/* Collapsed Desktop: Show only avatar */}
-            {collapsed && (
-              <div className="hidden lg:flex justify-center">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold" title={`${session?.user?.name} (${session?.user?.role})`}>
-                  {session?.user?.name?.charAt(0).toUpperCase()}
-                </div>
-              </div>
             )}
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto py-4 px-3 sidebar-scrollbar">
+          <nav className="flex-1 overflow-y-auto py-4 px-3">
             <div className="space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href
@@ -279,48 +232,58 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                   <Link
                     key={item.name}
                     href={item.href}
-                    prefetch={true}
                     onClick={() => {
                       setSidebarOpen(false)
-                      if (!isActive) {
-                        setIsNavigating(true)
-                      }
                     }}
-                    className={`flex items-center ${
-                      collapsed ? 'lg:justify-center lg:px-0' : 'px-3'
-                    } py-3 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center ${isCollapsed ? 'justify-center' : ''} px-3 py-3 rounded-lg text-sm font-medium transition-all ${
                       isActive
                         ? 'bg-white text-[#5C2482] shadow-lg'
                         : 'text-purple-100 hover:bg-white/10 hover:text-white'
                     }`}
-                    title={collapsed ? item.name : ''}
+                    title={isCollapsed ? item.name : ''}
                   >
-                    <span className={isActive ? 'text-[#5C2482]' : ''}>{item.icon}</span>
-                    {!collapsed && <span className="ml-3">{item.name}</span>}
+                    <span className={`${isActive ? 'text-[#5C2482]' : ''}`}>{item.icon}</span>
+                    {!isCollapsed && <span className="ml-3">{item.name}</span>}
                   </Link>
                 )
               })}
             </div>
           </nav>
 
-          {/* Sign Out */}
-          <div className="p-4 border-t border-purple-400/30">
+          <div className="hidden lg:flex p-2 border-t border-purple-400/30 justify-between items-center">
+            {/* Sign Out Button */}
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-all"
-              title={collapsed ? 'Sign Out' : ''}
+              className={`flex items-center ${isCollapsed ? 'justify-center' : ''} p-2 rounded-lg text-purple-100 hover:bg-white/10 hover:text-white transition-all`}
+              title="Sign Out"
             >
-              <svg className={`w-5 h-5 ${!collapsed ? 'mr-2' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              {!collapsed && <span>Sign Out</span>}
+              {!isCollapsed && <span className="ml-2">Sign Out</span>}
+            </button>
+
+            {/* Collapse / Expand Button */}
+            <button
+              onClick={handleToggleCollapse}
+              className="flex items-center justify-center p-2 rounded-lg text-purple-100 hover:bg-white/10 hover:text-white transition-all"
+              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <svg 
+                className={`w-5 h-5 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
             </button>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${collapsed ? 'lg:pl-20' : 'lg:pl-64'}`}>
+      <div className={`transition-all duration-300 ${isCollapsed ? 'lg:pl-20' : 'lg:pl-64'}`}>
         {/* Mobile Top Bar */}
         <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200 shadow-sm">
           <button
@@ -336,16 +299,13 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           </Link>
           <div className="w-10" /> {/* Spacer for balance */}
         </div>
-
-        {/* Page Content with smooth transition */}
-        <main className="p-4 sm:p-6 lg:p-8 min-h-screen">
-          <div className="transition-opacity duration-200" style={{ opacity: isNavigating ? 0.6 : 1 }}>
-            {children}
-          </div>
+        {/* Page Content */}
+        <main className="p-4 sm:p-6 lg:p-8">
+          {children}
         </main>
       </div>
     </div>
   )
 }
-
 export default DashboardLayout
+export { DashboardLayout }
