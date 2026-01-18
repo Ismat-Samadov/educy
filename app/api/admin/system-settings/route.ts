@@ -43,8 +43,10 @@ const updateSettingsSchema = z.object({
   enablePayments: z.boolean().optional(),
 
   // Enrollment Limits
-  // Note: 0 is treated as null because 0 enrollments is not a valid limit.
-  // Use a positive number (1-20) for a limit, or null for unlimited enrollments.
+  // Note: The preprocessing converts both 0 and empty string to null for unlimited enrollments.
+  // This handles form submissions where the field may be cleared (empty string) or
+  // explicitly set to 0. The validation schema then only accepts positive numbers (1-20) or null.
+  // This ensures: 0 → null (unlimited), 1-20 → valid limit, <0 or >20 → validation error
   maxEnrollmentsPerStudent: z.preprocess(
     (val) => (val === 0 || val === '' ? null : val),
     z.union([z.number().min(1).max(20), z.null()]).optional()
@@ -216,16 +218,20 @@ export async function PUT(request: NextRequest) {
     // Provide more specific error messages for common issues
     let errorMessage = 'Failed to update system settings'
     if (error instanceof Error) {
-      // Check for specific database errors
-      if (error.message.includes('Unique constraint')) {
+      // Check for specific Prisma/database errors using more specific patterns
+      const errorMsg = error.message
+      if (errorMsg.includes('Unique constraint failed')) {
         errorMessage = 'A configuration conflict occurred. Please try again.'
-      } else if (error.message.includes('Foreign key constraint')) {
+      } else if (errorMsg.includes('Foreign key constraint failed')) {
         errorMessage = 'Related data validation failed. Please check your inputs.'
-      } else if (error.message.includes('Connection')) {
+      } else if (errorMsg.includes('Can\'t reach database') || errorMsg.includes('Connection refused')) {
         errorMessage = 'Database connection error. Please try again later.'
       }
-      // Log the actual error for debugging
+      // Log the actual error for debugging (server-side only)
       console.error('Detailed error:', error.message)
+      if (errorMsg) {
+        console.error('Full error message:', errorMsg)
+      }
     }
     
     return NextResponse.json(
