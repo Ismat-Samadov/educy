@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **System Settings Database Migration**: Fixed missing `maxEnrollmentsPerStudent` column in database
+  - Created database migration to add missing column
+  - Updated `.gitignore` to include migrations in version control
+  - Added comprehensive migration deployment guide
+  - Column allows admins to limit the number of active enrollments per student
+
 ## [2.1.0] - 2026-01-18
 
 ### Added
