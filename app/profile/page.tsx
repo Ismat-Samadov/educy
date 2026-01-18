@@ -7,6 +7,9 @@ import DashboardLayout from '@/components/dashboard-layout'
 import { FormField } from '@/components/form-field'
 import { useFormValidation } from '@/hooks/use-form-validation'
 
+// Roles that can update expertise
+const INSTRUCTOR_ROLES = ['INSTRUCTOR', 'MODERATOR', 'ADMIN'] as const
+
 interface UserProfile {
   id: string
   email: string
@@ -17,6 +20,14 @@ interface UserProfile {
   role: string
   status: string
   profileAvatarUrl: string | null
+}
+
+interface UpdateProfileRequest {
+  name: string
+  surname: string
+  phone: string
+  profileAvatarUrl: string
+  expertise?: string[]
 }
 
 export default function ProfilePage() {
@@ -160,7 +171,7 @@ export default function ProfilePage() {
       }
 
       // Build request body - exclude expertise for students
-      const requestBody: any = {
+      const requestBody: UpdateProfileRequest = {
         name: formData.name,
         surname: formData.surname,
         phone: formData.phone,
@@ -168,7 +179,7 @@ export default function ProfilePage() {
       }
 
       // Only include expertise for instructors, moderators, and admins
-      const isInstructorRole = ['INSTRUCTOR', 'MODERATOR', 'ADMIN'].includes(profile?.role || '')
+      const isInstructorRole = INSTRUCTOR_ROLES.includes(profile?.role as any)
       if (isInstructorRole) {
         requestBody.expertise = formData.expertise
       }
@@ -258,7 +269,7 @@ export default function ProfilePage() {
     redirect('/auth/signin')
   }
 
-  const isInstructorRole = ['INSTRUCTOR', 'MODERATOR', 'ADMIN'].includes(profile?.role || '')
+  const isInstructorRole = INSTRUCTOR_ROLES.includes(profile?.role as any)
 
   return (
     <DashboardLayout role={session.user.role}>
