@@ -28,6 +28,11 @@ Apply the SQL migration to add the missing column to the production database.
 ALTER TABLE "educy"."system_settings" 
 ADD COLUMN IF NOT EXISTS "maxEnrollmentsPerStudent" INTEGER;
 
+-- Add a constraint to ensure non-negative values
+ALTER TABLE "educy"."system_settings"
+ADD CONSTRAINT "system_settings_maxEnrollmentsPerStudent_check" 
+CHECK ("maxEnrollmentsPerStudent" IS NULL OR "maxEnrollmentsPerStudent" > 0);
+
 -- Add a comment to document the column
 COMMENT ON COLUMN "educy"."system_settings"."maxEnrollmentsPerStudent" 
 IS 'Maximum number of active enrollments allowed per student (NULL = unlimited)';
@@ -92,6 +97,11 @@ Expected result:
 If you need to rollback this change:
 
 ```sql
+-- Drop the constraint first
+ALTER TABLE "educy"."system_settings" 
+DROP CONSTRAINT IF EXISTS "system_settings_maxEnrollmentsPerStudent_check";
+
+-- Then drop the column
 ALTER TABLE "educy"."system_settings" 
 DROP COLUMN IF EXISTS "maxEnrollmentsPerStudent";
 ```

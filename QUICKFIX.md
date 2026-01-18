@@ -11,6 +11,10 @@ Go to your **Vercel Dashboard** → **Storage** → **Postgres** → **Query** t
 ```sql
 ALTER TABLE "educy"."system_settings" 
 ADD COLUMN IF NOT EXISTS "maxEnrollmentsPerStudent" INTEGER;
+
+ALTER TABLE "educy"."system_settings"
+ADD CONSTRAINT "system_settings_maxEnrollmentsPerStudent_check" 
+CHECK ("maxEnrollmentsPerStudent" IS NULL OR "maxEnrollmentsPerStudent" > 0);
 ```
 
 ### Step 2: Verify
