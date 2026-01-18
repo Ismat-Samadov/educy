@@ -28,7 +28,7 @@ Apply the SQL migration to add the missing column to the production database.
 ALTER TABLE "educy"."system_settings" 
 ADD COLUMN IF NOT EXISTS "maxEnrollmentsPerStudent" INTEGER;
 
--- Add a constraint to ensure non-negative values
+-- Add a constraint to ensure positive values (matching API validation)
 ALTER TABLE "educy"."system_settings"
 ADD CONSTRAINT "system_settings_maxEnrollmentsPerStudent_check" 
 CHECK ("maxEnrollmentsPerStudent" IS NULL OR "maxEnrollmentsPerStudent" > 0);
