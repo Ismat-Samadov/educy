@@ -168,6 +168,7 @@ export default function ProfilePage() {
       }
 
       // Only include expertise for instructors, moderators, and admins
+      const isInstructorRole = ['INSTRUCTOR', 'MODERATOR', 'ADMIN'].includes(profile?.role || '')
       if (isInstructorRole) {
         requestBody.expertise = formData.expertise
       }
