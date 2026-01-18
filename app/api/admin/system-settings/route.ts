@@ -43,6 +43,8 @@ const updateSettingsSchema = z.object({
   enablePayments: z.boolean().optional(),
 
   // Enrollment Limits
+  // Note: 0 is treated as null because 0 enrollments is not a valid limit.
+  // Use a positive number (1-20) for a limit, or null for unlimited enrollments.
   maxEnrollmentsPerStudent: z.preprocess(
     (val) => (val === 0 || val === '' ? null : val),
     z.union([z.number().min(1).max(20), z.null()]).optional()
