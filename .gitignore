@@ -37,4 +37,7 @@ yarn-error.log*
 next-env.d.ts
 
 # prisma
-prisma/migrations
+# Ignore auto-generated migrations but allow manual SQL migrations
+prisma/migrations/*
+!prisma/migrations/*.sql
+!prisma/migrations/README.md
