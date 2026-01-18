@@ -159,13 +159,23 @@ export default function ProfilePage() {
         }
       }
 
+      // Build request body - exclude expertise for students
+      const requestBody: any = {
+        name: formData.name,
+        surname: formData.surname,
+        phone: formData.phone,
+        profileAvatarUrl: avatarUrl,
+      }
+
+      // Only include expertise for instructors, moderators, and admins
+      if (isInstructorRole) {
+        requestBody.expertise = formData.expertise
+      }
+
       const response = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          profileAvatarUrl: avatarUrl,
-        }),
+        body: JSON.stringify(requestBody),
       })
 
       const data = await response.json()
