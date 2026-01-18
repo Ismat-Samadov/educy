@@ -13,17 +13,17 @@ const updateSettingsSchema = z.object({
   platformName: z.string().min(1).max(50).optional(),
   platformLogoUrl: z.preprocess(
     (val) => (val === '' ? null : val),
-    z.string().url().optional().nullable()
+    z.union([z.string().url(), z.null()]).optional()
   ),
 
   // Email Configuration
   systemEmailFrom: z.preprocess(
     (val) => (val === '' ? null : val),
-    z.string().email().optional().nullable()
+    z.union([z.string().email(), z.null()]).optional()
   ),
   systemEmailName: z.preprocess(
     (val) => (val === '' ? null : val),
-    z.string().min(1).max(100).optional().nullable()
+    z.union([z.string().min(1).max(100), z.null()]).optional()
   ),
 
   // Security Settings (with hard limits)
@@ -43,7 +43,10 @@ const updateSettingsSchema = z.object({
   enablePayments: z.boolean().optional(),
 
   // Enrollment Limits
-  maxEnrollmentsPerStudent: z.number().min(1).max(20).optional().nullable(),
+  maxEnrollmentsPerStudent: z.preprocess(
+    (val) => (val === 0 || val === '' ? null : val),
+    z.union([z.number().min(1).max(20), z.null()]).optional()
+  ),
 })
 
 // GET /api/admin/system-settings - Get system settings
@@ -207,8 +210,24 @@ export async function PUT(request: NextRequest) {
     }
 
     console.error('System settings update error:', error)
+    
+    // Provide more specific error messages for common issues
+    let errorMessage = 'Failed to update system settings'
+    if (error instanceof Error) {
+      // Check for specific database errors
+      if (error.message.includes('Unique constraint')) {
+        errorMessage = 'A configuration conflict occurred. Please try again.'
+      } else if (error.message.includes('Foreign key constraint')) {
+        errorMessage = 'Related data validation failed. Please check your inputs.'
+      } else if (error.message.includes('Connection')) {
+        errorMessage = 'Database connection error. Please try again later.'
+      }
+      // Log the actual error for debugging
+      console.error('Detailed error:', error.message)
+    }
+    
     return NextResponse.json(
-      { success: false, error: 'Failed to update system settings' },
+      { success: false, error: errorMessage },
       { status: 500 }
     )
   }
