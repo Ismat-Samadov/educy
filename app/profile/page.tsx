@@ -30,6 +30,11 @@ interface UpdateProfileRequest {
   expertise?: string[]
 }
 
+// Helper function to check if user has instructor role
+const isInstructorRoleType = (role: string): boolean => {
+  return (INSTRUCTOR_ROLES as readonly string[]).includes(role)
+}
+
 export default function ProfilePage() {
   const { data: session, status, update: updateSession } = useSession()
   const router = useRouter()
@@ -179,8 +184,7 @@ export default function ProfilePage() {
       }
 
       // Only include expertise for instructors, moderators, and admins
-      const isInstructorRole = INSTRUCTOR_ROLES.includes(profile?.role as any)
-      if (isInstructorRole) {
+      if (isInstructorRoleType(profile?.role || '')) {
         requestBody.expertise = formData.expertise
       }
 
@@ -269,7 +273,7 @@ export default function ProfilePage() {
     redirect('/auth/signin')
   }
 
-  const isInstructorRole = INSTRUCTOR_ROLES.includes(profile?.role as any)
+  const isInstructorRole = isInstructorRoleType(profile?.role || '')
 
   return (
     <DashboardLayout role={session.user.role}>
