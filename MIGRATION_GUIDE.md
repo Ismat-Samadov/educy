@@ -43,7 +43,7 @@ A database migration has been created to add the missing column.
 
 1. **Pull the latest changes:**
    ```bash
-   git pull
+   git pull origin main
    ```
 
 2. **Apply the migration:**
@@ -108,5 +108,5 @@ ALTER TABLE "educy"."system_settings" DROP COLUMN "maxEnrollmentsPerStudent";
 ## Additional Resources
 
 - [Prisma Migration Documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate)
-- [Migration File Location](../prisma/migrations/20260118123516_add_max_enrollments_per_student/)
-- [System Settings API](../app/api/admin/system-settings/route.ts)
+- [Migration File Location](./prisma/migrations/20260118123516_add_max_enrollments_per_student/)
+- [System Settings API](./app/api/admin/system-settings/route.ts)
